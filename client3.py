@@ -19,7 +19,7 @@ class IntroWindow:
         self.frame = tk.Frame(intro)
         self.frame.pack()
 
-        greeting = "         Here is the client."
+        greeting = "    Start the journey of your data."
 
         photo = tk.PhotoImage(file="rsz_test.gif")
 
