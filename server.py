@@ -1,3 +1,5 @@
+import tkinter as tk
+import tkinter.messagebox
 import matplotlib.pyplot as plt
 from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
 import sys
@@ -17,10 +19,10 @@ win.title = "Server"
 class Server:
     def __init__(self, win):
         self.win = win
-        win.geometry("550x400")
+        win.geometry("1920x1080")
         self.frame = tk.Frame(win)
         self.scrollbar = tk.Scrollbar(self.frame)
-        self.msg_list = tk.Listbox(self.frame, height=20, width=60, yscrollcommand=self.scrollbar.set)
+        self.msg_list = tk.Listbox(self.frame, height=50, width=150, yscrollcommand=self.scrollbar.set)
         self.msg_list.pack(side=tk.LEFT, fill=tk.BOTH)
         self.scrollbar.pack(side=tk.LEFT, fill=tk.Y)
 
@@ -44,8 +46,9 @@ while True:
             string.append(float(x)/1000)
             i=i+1
             y.append(i)
-            server.msg_list.insert(tk.END, x)
-            win.update()
+            server.msg_list.insert(tk.END, "Velocity:" + str(x) + " m/ms   Time:" + str(i)+" ms")
+        
+        win.update()
         plt.plot(y,string)
         plt.xlabel('Time(ms)')
         plt.ylabel('Velocity(km/ms)')
