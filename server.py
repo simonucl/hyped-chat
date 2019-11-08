@@ -11,7 +11,25 @@ hostName = gethostbyname( '0.0.0.0' )
 mySocket = socket( AF_INET, SOCK_DGRAM )
 mySocket.bind( (hostName, PORT_NUMBER) )
 
-print ("Test server listening on port {0}\n".format(PORT_NUMBER))
+win = tk.Tk()
+win.title = "Server"
+
+class Server:
+    def __init__(self, win):
+        self.win = win
+        win.geometry("550x400")
+        self.frame = tk.Frame(win)
+        self.scrollbar = tk.Scrollbar(self.frame)
+        self.msg_list = tk.Listbox(self.frame, height=20, width=60, yscrollcommand=self.scrollbar.set)
+        self.msg_list.pack(side=tk.LEFT, fill=tk.BOTH)
+        self.scrollbar.pack(side=tk.LEFT, fill=tk.Y)
+
+        self.frame.pack()
+
+
+server = Server(win)
+server.msg_list.insert(tk.END, "Test server listening on port {0}\n".format(PORT_NUMBER))
+win.update()
 
 while True:
     (data,addr) = mySocket.recvfrom(SIZE)
@@ -26,7 +44,8 @@ while True:
             string.append(float(x)/1000)
             i=i+1
             y.append(i)
-            print(x)
+            server.msg_list.insert(tk.END, x)
+            win.update()
         plt.plot(y,string)
         plt.xlabel('Time(ms)')
         plt.ylabel('Velocity(km/ms)')
@@ -34,4 +53,5 @@ while True:
         plt.show()
         break
     else:
-        print(x)
+        server.msg_list.insert(tk.END, x)
+        win.update()
