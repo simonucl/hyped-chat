@@ -1,10 +1,12 @@
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
 import sys
 PORT_NUMBER = 5000
 SIZE = 1024
 
-hostName = gethostbyname( '127.0.0.1' )
+
+
+hostName = gethostbyname( '0.0.0.0' )
 
 mySocket = socket( AF_INET, SOCK_DGRAM )
 mySocket.bind( (hostName, PORT_NUMBER) )
@@ -18,15 +20,17 @@ while True:
         i=0
         string=[]
         y=[]
-        while i<100:
+        while i<=10000:
             (data,addr) = mySocket.recvfrom(SIZE)
             x= data.decode('utf-8')
-            string.append(float(x))
+            string.append(float(x)/1000)
             i=i+1
             y.append(i)
-        print(string)
-        print(y)
-        plt.plot(string,y)
+            print(x)
+        plt.plot(y,string)
+        plt.xlabel('Time(ms)')
+        plt.ylabel('Velocity(km/ms)')
+        plt.suptitle('Velocity/Time graph')
         plt.show()
         break
     else:
