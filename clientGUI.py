@@ -3,6 +3,8 @@ import tkinter.messagebox
 import sys
 import random
 from socket import socket, AF_INET, SOCK_DGRAM
+from datetime import datetime  
+from datetime import timedelta
 
 SERVER_IP   = '127.0.0.1'
 PORT_NUMBER = 5000
@@ -12,7 +14,7 @@ mySocket = socket( AF_INET, SOCK_DGRAM )
 class IntroWindow:
     def __init__(self, intro):
         self.intro = intro
-        intro.geometry("1920x720")
+        intro.geometry("1920x1080")
         self.frame = tk.Frame(intro)
         self.frame.pack()
 
@@ -49,16 +51,16 @@ class Chat:
 
     def __init__(self, chat):
         self.chat = chat
-        chat.geometry("700x400")
+        chat.geometry("1920x1080")
 
         self.frame = tk.Frame(chat)
 
         self.scrollbar = tk.Scrollbar(self.frame)
-        self.msg_list = tk.Listbox(self.frame, height=20, width=60, yscrollcommand=self.scrollbar.set)
+        self.msg_list = tk.Listbox(self.frame, height=40, width=110, yscrollcommand=self.scrollbar.set)
         self.msg_list.pack(side=tk.LEFT, fill=tk.BOTH)
         self.scrollbar.pack(side=tk.LEFT, fill=tk.Y)
 
-        self.user = tk.Listbox(self.frame, height=20, width=20)
+        self.user = tk.Listbox(self.frame, height=40, width=80)
         self.user.pack(side=tk.RIGHT)
 
         self.frame.pack()
@@ -68,15 +70,17 @@ class Chat:
 
         self.entry_win = tk.Entry(chat, textvariable=self.my_msg, width=70)
         self.entry_win.bind("<Return>", self.send)
-        self.entry_win.place(x=18, y=350)
+        self.entry_win.place(x=100, y=700)
 
         self.send_btn = tk.Button(chat, text="Send", command=self.send)
-        self.send_btn.place(x=620, y=350)
+        self.send_btn.place(x=800, y=700)
+        x= datetime.now()
+        self.user.insert(tk.END,x.strftime("%X")+" : Connected to:" +SERVER_IP)
 
     def send(self):
         msg = self.my_msg.get()
         self.my_msg.set("")
-        self.msg_list.insert(tk.END, "ME:  "+msg)
+
         mySocket.sendto(str(msg).encode('utf-8'),(SERVER_IP,PORT_NUMBER))
         i = 0
         x=[]
@@ -93,6 +97,16 @@ class Chat:
                 mySocket.sendto(str(sum(x)).encode('utf-8'),(SERVER_IP,PORT_NUMBER))
                 self.msg_list.insert(tk.END, "Velocity:"+str(sum(x))+"   Time:"+str(i))
                 i = i+1
+            while i==1001:
+                x = datetime.now()
+                self.user.insert(tk.END,x.strftime("%X")+" : [1..1000] data have been sent successfully to " +SERVER_IP)
+                i=i+1
+        else:
+            self.msg_list.insert(tk.END, "ME:  "+msg)
+            time = datetime.now()
+            self.user.insert(tk.END,time.strftime("%X")+" : Data has been sent successfully to " +SERVER_IP)
+
+            
 
 
 intro = tk.Tk()
