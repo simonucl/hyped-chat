@@ -54,7 +54,6 @@ while True:
         plt.ylabel('Velocity(km/ms)')
         plt.suptitle('Velocity/Time graph')
         plt.show()
-        break
     else:
-        server.msg_list.insert(tk.END, x)
+        server.msg_list.insert(tk.END, "Client: " +str(x))
         win.update()
